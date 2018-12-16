@@ -40,4 +40,8 @@ public static class Utils {
             speed * Mathf.Sin(radian)
         );
     }
+
+    public static float GetDegree(Rigidbody2D rd) {
+        return Mathf.Atan2(rd.velocity.y, rd.velocity.x) * Mathf.Rad2Deg;
+    }
 }

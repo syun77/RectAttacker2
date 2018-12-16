@@ -2,11 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Shot : MonoBehaviour {
-
-    // ==============================================
-    // Constatns.
-    public float MOVE_SPEED;
+public class Bullet : MonoBehaviour {
 
     // ==============================================
     // Variables: Objects.
@@ -14,28 +10,26 @@ public class Shot : MonoBehaviour {
     Rigidbody2D _rigidbody2D;
 
     // ==============================================
+    // Use this for initialization
     public void SetVelocity(float degree, float speed) {
         _rigidbody2D = GetComponent<Rigidbody2D>();
         Utils.SetVelocity(_rigidbody2D, degree, speed);
     }
 
-
-	// Use this for initialization
-	void Start () {
-        _rigidbody2D = GetComponent<Rigidbody2D>();	
+    void Start () {
+        _rigidbody2D = GetComponent<Rigidbody2D>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		
         if(Utils.OutOfScreen(transform.position)) {
             Vanish();
         }
 	}
 
     public void Vanish() {
-        float deg = Utils.GetDegree(_rigidbody2D);
-        deg += 180.0f;
-        Particle.Add(particle, transform.position.x, transform.position.y, 4, deg, Color.cyan);
+        Particle.Add(particle, transform.position.x, transform.position.y, 4, -1, Color.red);
         Destroy(gameObject);
     }
 }

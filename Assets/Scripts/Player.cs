@@ -25,16 +25,10 @@ public class Player : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         Move();
-        transform.localPosition = Utils.ClampPosition(transform.localPosition);
 
-        if (Input.GetKeyDown("space")) {
-            _enableShot = true;
-        }
-        else if(Input.GetKeyUp("space")) {
-            _enableShot = false;
-        }
+        _enableShot = Input.GetKey(KeyCode.Space);
 
-        if(_enableShot) {
+        if (_enableShot) {
             Vector3 v = new Vector3(transform.position.x, transform.position.y);
             GameObject obj = Instantiate(_shot, v, Quaternion.identity);
             Shot shot = obj.GetComponent<Shot>();
@@ -51,5 +45,8 @@ public class Player : MonoBehaviour {
         v.Normalize();
         v *= MOVE_SPEED;
         _rigidbody2D.velocity = v;
+
+        // Check to outside.
+        transform.localPosition = Utils.ClampPosition(transform.localPosition);
     }
 }
