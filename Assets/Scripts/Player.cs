@@ -9,6 +9,7 @@ public class Player : MonoBehaviour {
     // ======================================
     // Variables. Objects.
     public GameObject _shot;
+    public GameObject _horming;
     Rigidbody2D _rigidbody2D;
 
     // ======================================
@@ -25,7 +26,9 @@ public class Player : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         Move();
+    }
 
+    private void FixedUpdate() {
         _enableShot = Input.GetKey(KeyCode.Space);
 
         if (_enableShot) {
@@ -48,5 +51,25 @@ public class Player : MonoBehaviour {
 
         // Check to outside.
         transform.localPosition = Utils.ClampPosition(transform.localPosition);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision) {
+        switch(collision.tag) {
+        case "Bullet":
+            // TODO:
+            {
+                Vector3 v = new Vector3(transform.position.x, transform.position.y);
+                GameObject obj = Instantiate(_horming, v, Quaternion.identity);
+                Horming h = obj.GetComponent<Horming>();
+                Bullet b = collision.gameObject.GetComponent<Bullet>();
+                h.SetDirection(Utils.GetDegree(b.GetComponent<Rigidbody2D>()));
+                //h.SetDirection(Random.Range(0, 360));
+                b.Vanish();
+            }
+            break;
+
+        case "Enemy":
+            break;
+        }
     }
 }

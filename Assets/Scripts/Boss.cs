@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour {
+public class Boss : MonoBehaviour {
+
     // ==============================================
     // Variables: Objects.
     public GameObject player;
@@ -15,11 +16,12 @@ public class Enemy : MonoBehaviour {
     int interval = 0;
 
     // ==============================================
+    // Functions.
     // Use this for initialization
     void Start () {
         _rigidbody2D = GetComponent<Rigidbody2D>();
-	}
-	
+    }
+
     void DoBullet(float degree, float speed) {
         Vector3 v = new Vector3(transform.position.x, transform.position.y);
         GameObject obj = Instantiate(bullet, v, Quaternion.identity);
@@ -27,8 +29,9 @@ public class Enemy : MonoBehaviour {
         b.SetVelocity(degree, speed);
     }
 
-	// Update is called once per frame
-	void Update () {
+    // Update is called once per frame
+    void Update () {
+		
 	}
 
     private void FixedUpdate() {
@@ -40,9 +43,8 @@ public class Enemy : MonoBehaviour {
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
-        switch(collision.tag) {
-        case "Shot":
-            {
+        switch (collision.tag) {
+        case "Shot": {
                 Shot shot = collision.gameObject.GetComponent<Shot>();
                 shot.Vanish();
             }

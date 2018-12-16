@@ -14,6 +14,7 @@ public class Shot : MonoBehaviour {
     Rigidbody2D _rigidbody2D;
 
     // ==============================================
+    // Functions.
     public void SetVelocity(float degree, float speed) {
         _rigidbody2D = GetComponent<Rigidbody2D>();
         Utils.SetVelocity(_rigidbody2D, degree, speed);
