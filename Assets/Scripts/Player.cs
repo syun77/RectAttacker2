@@ -12,6 +12,10 @@ public class Player : MonoBehaviour {
     Rigidbody2D _rigidbody2D;
 
     // ======================================
+    // Variables.
+    bool _enableShot = false;
+
+    // ======================================
     // Functions.
     // Use this for initialization
     void Start () {
@@ -24,12 +28,20 @@ public class Player : MonoBehaviour {
         transform.localPosition = Utils.ClampPosition(transform.localPosition);
 
         if (Input.GetKeyDown("space")) {
+            _enableShot = true;
+        }
+        else if(Input.GetKeyUp("space")) {
+            _enableShot = false;
+        }
+
+        if(_enableShot) {
             Vector3 v = new Vector3(transform.position.x, transform.position.y);
             GameObject obj = Instantiate(_shot, v, Quaternion.identity);
             Shot shot = obj.GetComponent<Shot>();
-            shot.SetVelocity(90, shot.MOVE_SPEED);
+            float degree = 90;
+            degree += Random.Range(-10, 10);
+            shot.SetVelocity(degree, shot.MOVE_SPEED);
         }
-
     }
 
     void Move() {

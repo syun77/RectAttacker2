@@ -31,7 +31,7 @@ public class Shot : MonoBehaviour {
         }
 	}
 
-    void Vanish() {
+    public void Vanish() {
         Destroy(gameObject);
     }
 }
