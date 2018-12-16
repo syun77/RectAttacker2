@@ -13,4 +13,31 @@ public static class Utils {
             0
         );
     }
+
+    public static bool OutOfScreen(Vector3 position) {
+        if(position.x < -MOVE_LIMIT.x) {
+            return true;
+        }
+        if(position.y < -MOVE_LIMIT.y) {
+            return true;
+        }
+        if(position.x > MOVE_LIMIT.x) {
+            return true;
+        }
+        if(position.y > MOVE_LIMIT.y) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static void SetVelocity(Rigidbody2D rd, float degree, float speed) {
+
+        float radian = Mathf.Deg2Rad * degree;
+
+        rd.velocity = new Vector2(
+            speed * Mathf.Cos(radian),
+            speed * Mathf.Sin(radian)
+        );
+    }
 }

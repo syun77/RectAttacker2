@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
-    public float MOVE_SPEED = 5;
+    public float MOVE_SPEED;
 
     // ======================================
     // Variables. Objects.
+    public GameObject _shot;
     Rigidbody2D _rigidbody2D;
 
     // ======================================
@@ -20,9 +21,16 @@ public class Player : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         Move();
-
         transform.localPosition = Utils.ClampPosition(transform.localPosition);
-	}
+
+        if (Input.GetKeyDown("space")) {
+            Vector3 v = new Vector3(transform.position.x, transform.position.y);
+            GameObject obj = Instantiate(_shot, v, Quaternion.identity);
+            Shot shot = obj.GetComponent<Shot>();
+            shot.SetVelocity(90, shot.MOVE_SPEED);
+        }
+
+    }
 
     void Move() {
         float horizontal = Input.GetAxisRaw("Horizontal");
