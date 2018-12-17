@@ -56,16 +56,6 @@ public class Player : MonoBehaviour {
     private void OnTriggerEnter2D(Collider2D collision) {
         switch(collision.tag) {
         case "Bullet":
-            // TODO:
-            {
-                Vector3 v = new Vector3(transform.position.x, transform.position.y);
-                GameObject obj = Instantiate(_horming, v, Quaternion.identity);
-                Homing h = obj.GetComponent<Homing>();
-                Bullet b = collision.gameObject.GetComponent<Bullet>();
-                h.SetDirection(Utils.GetDegree(b.GetComponent<Rigidbody2D>()));
-                //h.SetDirection(Random.Range(0, 360));
-                b.Vanish();
-            }
             break;
 
         case "Enemy":
