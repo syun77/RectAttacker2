@@ -39,15 +39,24 @@ public class Particle : MonoBehaviour {
     // Use this for initialization
     void Start () {
         _rigidbody2D = GetComponent<Rigidbody2D>();
+
+        // Set the degree.
         float degree = _degree + Random.Range(-30, 30);
         if(_degree <= 0) {
-            degree = Random.Range(75, 135);
+            // Default. (0 to 360)
+            degree = Random.Range(0, 360);
         }
+
+        // Set the speed.
+        // 1 to 3.
         float speed = Random.Range(1, 3);
+
+        // Set the velocity.
         Utils.SetVelocity(_rigidbody2D, degree, speed);
 
         _life = 1;
 
+        // Set the rendering color.
         SpriteRenderer render = GetComponent<SpriteRenderer>();
         render.color = _color;
 	}
@@ -62,9 +71,11 @@ public class Particle : MonoBehaviour {
 
     private void FixedUpdate() {
 
+        // Decay the speed.
         float friction = 0.95f;
         _rigidbody2D.velocity *= friction;
 
+        // Blinking.
         if(_life < 0.25f) {
             SpriteRenderer render = GetComponent<SpriteRenderer>();
             if(render.enabled) {

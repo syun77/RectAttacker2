@@ -51,8 +51,8 @@ public class Boss : MonoBehaviour {
             break;
 
         case "Horming": {
-                Horming horming = collision.gameObject.GetComponent<Horming>();
-                horming.Vanish();
+                Homing homing = collision.gameObject.GetComponent<Homing>();
+                homing.Vanish();
             }
             break;
         }

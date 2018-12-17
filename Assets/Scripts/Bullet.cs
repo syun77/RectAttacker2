@@ -10,6 +10,7 @@ public class Bullet : MonoBehaviour {
     Rigidbody2D _rigidbody2D;
 
     // ==============================================
+    // Functions.
     // Use this for initialization
     public void SetVelocity(float degree, float speed) {
         _rigidbody2D = GetComponent<Rigidbody2D>();

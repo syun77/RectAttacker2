@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Horming : MonoBehaviour {
+public class Homing : MonoBehaviour {
 
     // ==============================================
     // Variables: Objects.
@@ -17,6 +17,7 @@ public class Horming : MonoBehaviour {
     float rotSpeed = 0.01f;
 
     // ==============================================
+    // Functions.
     // Use this for initialization
     void Start () {
         _rigidbody2D = GetComponent<Rigidbody2D>();
@@ -39,6 +40,8 @@ public class Horming : MonoBehaviour {
 	}
 
     private void FixedUpdate() {
+
+        // Turn for homing.
         float aim = Utils.GetAim2D(gameObject, boss);
         float d = Mathf.DeltaAngle(direction, aim);
         d *= rotSpeed;
