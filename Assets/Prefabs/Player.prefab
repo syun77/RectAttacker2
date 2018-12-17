@@ -72,7 +72,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -100,6 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MOVE_SPEED: 5
+  REFLECT_OFFSET: 1
   _shot: {fileID: 1846551556404810, guid: acb8d6da53ff14c7d88621b92cb732df, type: 2}
   _horming: {fileID: 1115111858502894, guid: fc18b865ef6c84e8bac3996e0beef581, type: 2}
 --- !u!212 &212702524057965582

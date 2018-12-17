@@ -20,6 +20,14 @@ public class Reflect : MonoBehaviour {
 		
 	}
 
+    public void SetPosition(float x, float y) {
+        transform.position = new Vector3(x, y);
+    }
+
+    public void SetVisible(bool b) {
+        gameObject.SetActive(b);
+    }
+
     private void OnTriggerEnter2D(Collider2D collision) {
         if(collision.tag == "Bullet") {
             Vector3 v = new Vector3(transform.position.x, transform.position.y);
