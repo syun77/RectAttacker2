@@ -9,7 +9,6 @@ public class Boss : MonoBehaviour {
     public GameObject player;
     public GameObject bullet;
     public GameObject particle;
-    Rigidbody2D _rigidbody2D;
 
     // ==============================================
     // Variables.
@@ -19,7 +18,6 @@ public class Boss : MonoBehaviour {
     // Functions.
     // Use this for initialization
     void Start () {
-        _rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
     void DoBullet(float degree, float speed) {
