@@ -30,6 +30,7 @@ public class Player : MonoBehaviour {
     bool _enableShot = false;
     int _shotPower;
     int _shieldPower;
+    int _shotInterval = 0;
 
     // ======================================
     // Functions.
@@ -99,16 +100,17 @@ public class Player : MonoBehaviour {
         }
 
         bool b = Input.GetKey(KeyCode.X);
-        _shieldPower += 1;
-        if(_shieldPower > MAX_POWER) {
-            _shieldPower = MAX_POWER;
+        if (b == false) {
+            _shieldPower += 5;
+            if (_shieldPower > MAX_POWER) {
+                _shieldPower = MAX_POWER;
+            }
         }
-
-        if(_shieldPower <= 0) {
+        if (_shieldPower <= 0) {
             b = false;
         }
 
-        if(b) {
+        if (b) {
             r.SetVisible(true);
 
             _shieldPower -= DECREASE_SHIELD;
@@ -127,18 +129,36 @@ public class Player : MonoBehaviour {
     }
 
     /// <summary>
+    /// Get the shot ratio.
+    /// </summary>
+    /// <returns>The shot ratio.</returns>
+    float _GetShotRatio() {
+        return 1.0f * _shotPower / MAX_POWER;
+    }
+
+    /// <summary>
     /// Update the shot.
     /// </summary>
     void _UpdateShot() {
 
         // Increase power.
-        _shotPower += 1;
+        _shotPower += 5;
         if (_shotPower > MAX_POWER) {
             _shotPower = MAX_POWER;
         }
         _enableShot = Input.GetKey(KeyCode.Z);
+        if(_enableShot) {
+            _shotPower -= DECREASE_SHOT;
+            if (_shotPower < 0) {
+                _shotPower = 0;
+            }
+        }
 
-        if(_shotPower <= 0) {
+        if (_shotPower <= 0) {
+            _enableShot = false;
+        }
+        if(_shotInterval > 0) {
+            _shotInterval--;
             _enableShot = false;
         }
 
@@ -150,9 +170,18 @@ public class Player : MonoBehaviour {
             degree += Random.Range(-10, 10);
             shot.SetVelocity(degree, shot.MOVE_SPEED);
 
-            _shotPower -= DECREASE_SHOT;
-            if(_shotPower < 0) {
-                _shotPower = 0;
+            float rate = _GetShotRatio();
+            if(rate < 0.2f) {
+                _shotInterval = 5;
+            }
+            else if(rate < 0.5f) {
+                _shotInterval = 4;
+            }
+            else if (rate < 0.75f) {
+                _shotInterval = 3;
+            }
+            else if (rate < 0.9f) {
+                _shotInterval = 1;
             }
         }
     }
