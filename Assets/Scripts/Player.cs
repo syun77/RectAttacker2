@@ -72,20 +72,38 @@ public class Player : MonoBehaviour {
     void UpdateReflect() {
 
         Reflect r = _GetReflect();
-        if(r != null) {
-            bool b = Input.GetKey(KeyCode.X);
-            if(b) {
-                r.SetVisible(true);
-            }
-            else {
-                r.SetVisible(false);
-            }
-
-            float x = transform.position.x;
-            float y = transform.position.y;
-            y += REFLECT_OFFSET;
-            r.SetPosition(x, y);
+        if(r == null) {
+            return;
         }
+
+        bool b = Input.GetKey(KeyCode.X);
+        if(b == false) {
+            _powerShield += 1;
+            if(_powerShield > MAX_POWER) {
+                _powerShield = MAX_POWER;
+            }
+        }
+
+        if(_powerShield <= 0) {
+            b = false;
+        }
+
+        if(b) {
+            r.SetVisible(true);
+
+            _powerShield -= 3;
+            if(_powerShield < 0) {
+                _powerShield = 0;
+            }
+        }
+        else {
+            r.SetVisible(false);
+        }
+
+        float x = transform.position.x;
+        float y = transform.position.y;
+        y += REFLECT_OFFSET;
+        r.SetPosition(x, y);
     }
 
     void _UpdateShot() {

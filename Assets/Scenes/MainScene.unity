@@ -438,6 +438,11 @@ Prefab:
       propertyPath: _textShot
       value: 
       objectReference: {fileID: 1022353722}
+    - target: {fileID: 114337672630720558, guid: af1b025138e8d4cefabe8ec201827360,
+        type: 2}
+      propertyPath: MAX_POWER
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: af1b025138e8d4cefabe8ec201827360, type: 2}
   m_IsPrefabAsset: 0
