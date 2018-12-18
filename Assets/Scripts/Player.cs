@@ -8,6 +8,7 @@ public class Player : MonoBehaviour {
     public float MOVE_SPEED;
     public float REFLECT_OFFSET;
     public int MAX_POWER;
+    public int INITIALE_POWER;
 
     // ======================================
     // Variables. Objects.
@@ -21,14 +22,17 @@ public class Player : MonoBehaviour {
     // ======================================
     // Variables.
     bool _enableShot = false;
-    int _powerShot = 100;
-    int _powerShield = 100;
+    int _powerShot;
+    int _powerShield;
 
     // ======================================
     // Functions.
     // Use this for initialization
     void Start () {
         _rigidbody2D = GetComponent<Rigidbody2D>();
+
+        _powerShot = INITIALE_POWER;
+        _powerShield = INITIALE_POWER;
 	}
 
     Reflect _GetReflect() {
