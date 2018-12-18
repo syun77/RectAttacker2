@@ -5,10 +5,16 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour {
 
+    // ======================================
+    // Constants.
     public float MOVE_SPEED;
     public float REFLECT_OFFSET;
+
+    // Constants: Powers.
     public int MAX_POWER;
     public int INITIALE_POWER;
+    public int DECREASE_SHOT;
+    public int DECREASE_SHIELD;
 
     // ======================================
     // Variables. Objects.
@@ -22,8 +28,8 @@ public class Player : MonoBehaviour {
     // ======================================
     // Variables.
     bool _enableShot = false;
-    int _powerShot;
-    int _powerShield;
+    int _shotPower;
+    int _shieldPower;
 
     // ======================================
     // Functions.
@@ -31,10 +37,14 @@ public class Player : MonoBehaviour {
     void Start () {
         _rigidbody2D = GetComponent<Rigidbody2D>();
 
-        _powerShot = INITIALE_POWER;
-        _powerShield = INITIALE_POWER;
+        _shotPower = INITIALE_POWER;
+        _shieldPower = INITIALE_POWER;
 	}
 
+    /// <summary>
+    /// Get the reflect.
+    /// </summary>
+    /// <returns>The reflect.</returns>
     Reflect _GetReflect() {
         if(_reflect == null) {
             GameObject obj = GameObject.Find("Reflect");
@@ -49,10 +59,12 @@ public class Player : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         Move();
-
         _UpdateUI();
     }
 
+    /// <summary>
+    /// Fixed update.
+    /// </summary>
     private void FixedUpdate() {
         // Check to fire a shot.
         _UpdateShot();
@@ -61,6 +73,9 @@ public class Player : MonoBehaviour {
         UpdateReflect();
     }
 
+    /// <summary>
+    /// Move this instance.
+    /// </summary>
     void Move() {
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
@@ -73,6 +88,9 @@ public class Player : MonoBehaviour {
         transform.localPosition = Utils.ClampPosition(transform.localPosition);
     }
 
+    /// <summary>
+    /// Update the reflect.
+    /// </summary>
     void UpdateReflect() {
 
         Reflect r = _GetReflect();
@@ -81,23 +99,21 @@ public class Player : MonoBehaviour {
         }
 
         bool b = Input.GetKey(KeyCode.X);
-        if(b == false) {
-            _powerShield += 1;
-            if(_powerShield > MAX_POWER) {
-                _powerShield = MAX_POWER;
-            }
+        _shieldPower += 1;
+        if(_shieldPower > MAX_POWER) {
+            _shieldPower = MAX_POWER;
         }
 
-        if(_powerShield <= 0) {
+        if(_shieldPower <= 0) {
             b = false;
         }
 
         if(b) {
             r.SetVisible(true);
 
-            _powerShield -= 3;
-            if(_powerShield < 0) {
-                _powerShield = 0;
+            _shieldPower -= DECREASE_SHIELD;
+            if(_shieldPower < 0) {
+                _shieldPower = 0;
             }
         }
         else {
@@ -110,17 +126,19 @@ public class Player : MonoBehaviour {
         r.SetPosition(x, y);
     }
 
+    /// <summary>
+    /// Update the shot.
+    /// </summary>
     void _UpdateShot() {
 
-        _enableShot = Input.GetKey(KeyCode.Z);
-        if(_enableShot == false) {
-            _powerShot += 1;
-            if(_powerShot > MAX_POWER) {
-                _powerShot = MAX_POWER;
-            }
+        // Increase power.
+        _shotPower += 1;
+        if (_shotPower > MAX_POWER) {
+            _shotPower = MAX_POWER;
         }
+        _enableShot = Input.GetKey(KeyCode.Z);
 
-        if(_powerShot <= 0) {
+        if(_shotPower <= 0) {
             _enableShot = false;
         }
 
@@ -132,19 +150,25 @@ public class Player : MonoBehaviour {
             degree += Random.Range(-10, 10);
             shot.SetVelocity(degree, shot.MOVE_SPEED);
 
-            _powerShot -= 3;
-            if(_powerShot < 0) {
-                _powerShot = 0;
+            _shotPower -= DECREASE_SHOT;
+            if(_shotPower < 0) {
+                _shotPower = 0;
             }
         }
     }
 
+    /// <summary>
+    /// Update the user interface.
+    /// </summary>
     void _UpdateUI() {
-        _textShot.text = "Shot: " + _powerShot + "%";
-        _textShield.text = "Shield: " + _powerShield + "%";
+        _textShot.text = "Shot: " + (100 * _shotPower / MAX_POWER) + "%";
+        _textShield.text = "Shield: " + (100 * _shieldPower / MAX_POWER) + "%";
     }
 
-
+    /// <summary>
+    /// Trigger enter2D.
+    /// </summary>
+    /// <param name="collision">Collision.</param>
     private void OnTriggerEnter2D(Collider2D collision) {
         switch(collision.tag) {
         case "Bullet":
