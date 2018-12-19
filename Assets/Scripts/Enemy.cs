@@ -12,10 +12,10 @@ public class Enemy : MonoBehaviour {
 
     // ==============================================
     // Variables: Objects.
-    public GameObject player;
     public GameObject bullet;
     public GameObject particle;
     Rigidbody2D _rigidbody2D;
+    Player _player;
 
     // ==============================================
     // Variables.
@@ -23,9 +23,10 @@ public class Enemy : MonoBehaviour {
     int interval = 0;
 
     // ==============================================
-    public void Init(eId id, float degree, float speed) {
+    public void Init(eId id, float degree, float speed, Player player) {
 
         this.id = id;
+        _player = player;
 
         _rigidbody2D = GetComponent<Rigidbody2D>();
         Utils.SetVelocity(_rigidbody2D, degree, speed);
@@ -46,6 +47,10 @@ public class Enemy : MonoBehaviour {
         Bullet b = obj.GetComponent<Bullet>();
         b.SetVelocity(degree, speed);
     }
+    void DoBulletAim(float speed) {
+        float aim = Utils.GetAim2D(this.gameObject, _player.gameObject);
+        DoBullet(aim, speed);
+    }
 
 	// Update is called once per frame
 	void Update () {
@@ -53,10 +58,9 @@ public class Enemy : MonoBehaviour {
 
     private void FixedUpdate() {
         interval++;
-        DoBullet(interval * 3, 5);
-        DoBullet(interval * -3, 5);
-        DoBullet(interval * 1, 5);
-        DoBullet(interval * -1, 5);
+        if(interval%10 == 1) {
+            DoBulletAim(5);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {

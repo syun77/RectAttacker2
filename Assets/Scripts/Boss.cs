@@ -6,10 +6,10 @@ public class Boss : MonoBehaviour {
 
     // ==============================================
     // Variables: Objects.
-    public GameObject player;
     public GameObject bullet;
     public GameObject particle;
     public GameObject enemy;
+    public Player _player;
 
     // ==============================================
     // Variables.
@@ -34,10 +34,17 @@ public class Boss : MonoBehaviour {
 	}
 
     void AddEnemy(Enemy.eId id, float degree, float speed) {
-        Vector3 v = new Vector3(transform.position.x, transform.position.y);
-        GameObject obj = Instantiate(enemy, v, Quaternion.identity);
-        Enemy e = obj.GetComponent<Enemy>();
-        e.Init(id, degree, speed);
+        if(_player == null) {
+            GameObject obj = GameObject.Find("Player");
+            _player = obj.GetComponent<Player>();
+        }
+
+        {
+            Vector3 v = new Vector3(transform.position.x, transform.position.y);
+            GameObject obj = Instantiate(enemy, v, Quaternion.identity);
+            Enemy e = obj.GetComponent<Enemy>();
+            e.Init(id, degree, speed, _player);
+        }
     }
 
     private void FixedUpdate() {
