@@ -103,8 +103,8 @@ MonoBehaviour:
   REFLECT_OFFSET: 1
   MAX_POWER: 1000
   INITIALE_POWER: 500
-  DECREASE_SHOT: 20
-  DECREASE_SHIELD: 20
+  DECREASE_SHOT: 10
+  DECREASE_SHIELD: 10
   _shot: {fileID: 1846551556404810, guid: acb8d6da53ff14c7d88621b92cb732df, type: 2}
   _horming: {fileID: 1115111858502894, guid: fc18b865ef6c84e8bac3996e0beef581, type: 2}
   _textShot: {fileID: 0}

@@ -81,6 +81,7 @@ MonoBehaviour:
   player: {fileID: 1699344605628348, guid: af1b025138e8d4cefabe8ec201827360, type: 2}
   bullet: {fileID: 1544222816449982, guid: 15a355f5c985b44158099635e7edc10c, type: 2}
   particle: {fileID: 1892614031752232, guid: 8a76931317a354a03a44e811507f42d6, type: 2}
+  enemy: {fileID: 1703423755657974, guid: acaf9ba0297d14b738805ccc23a66854, type: 2}
 --- !u!212 &212724097653783902
 SpriteRenderer:
   m_ObjectHideFlags: 1

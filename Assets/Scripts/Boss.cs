@@ -9,6 +9,7 @@ public class Boss : MonoBehaviour {
     public GameObject player;
     public GameObject bullet;
     public GameObject particle;
+    public GameObject enemy;
 
     // ==============================================
     // Variables.
@@ -32,12 +33,20 @@ public class Boss : MonoBehaviour {
 		
 	}
 
+    void AddEnemy(Enemy.eId id, float degree, float speed) {
+        Vector3 v = new Vector3(transform.position.x, transform.position.y);
+        GameObject obj = Instantiate(enemy, v, Quaternion.identity);
+        Enemy e = obj.GetComponent<Enemy>();
+        e.Init(id, degree, speed);
+    }
+
     private void FixedUpdate() {
         interval++;
-        DoBullet(interval * 3, 5);
-        DoBullet(interval * -3, 5);
-        DoBullet(interval * 1, 5);
-        DoBullet(interval * -1, 5);
+
+        if(interval%60 == 0) {
+            float rot = Random.Range(0, 360);
+            AddEnemy(Enemy.eId.Zako, rot, 5);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {

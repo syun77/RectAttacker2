@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour {
+
+    // ==============================================
+    // Constants.
+    public enum eId {
+        Zako,
+    };
+
     // ==============================================
     // Variables: Objects.
     public GameObject player;
@@ -12,14 +19,27 @@ public class Enemy : MonoBehaviour {
 
     // ==============================================
     // Variables.
+    eId id = eId.Zako;
     int interval = 0;
 
     // ==============================================
+    public void Init(eId id, float degree, float speed) {
+
+        this.id = id;
+
+        _rigidbody2D = GetComponent<Rigidbody2D>();
+        Utils.SetVelocity(_rigidbody2D, degree, speed);
+
+        transform.localScale = new Vector3(0.5f, 0.5f, 1);
+
+        Destroy(gameObject, 3);
+    }
+
     // Use this for initialization
     void Start () {
         _rigidbody2D = GetComponent<Rigidbody2D>();
 	}
-	
+
     void DoBullet(float degree, float speed) {
         Vector3 v = new Vector3(transform.position.x, transform.position.y);
         GameObject obj = Instantiate(bullet, v, Quaternion.identity);
