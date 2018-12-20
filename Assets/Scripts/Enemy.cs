@@ -16,6 +16,19 @@ public class Enemy : MonoBehaviour {
         Big,    // 0.8f
     }
 
+    struct Info {
+        public eId id;
+        public eSize size;
+        public Info(eId id, eSize size) {
+            this.id = id;
+            this.size = size;
+        }
+    };
+
+    static Info[] InfoTbl = new Info[] {
+        new Info (eId.Zako, eSize.Small),
+    };
+
     // ==============================================
     // Variables: Objects.
     public GameObject bullet;
@@ -44,9 +57,25 @@ public class Enemy : MonoBehaviour {
         _rigidbody2D = GetComponent<Rigidbody2D>();
         Utils.SetVelocity(_rigidbody2D, degree, speed);
 
-        transform.localScale = new Vector3(0.1f, 0.1f, 1);
+        float size = _GetSize(id);
+        transform.localScale = new Vector3(size, size, 1);
 
         Destroy(gameObject, 3);
+    }
+
+    Info _GetInfo(eId id) {
+        foreach(Info info in InfoTbl) {
+            if(id == info.id) {
+                return info;
+            }
+        }
+
+        return InfoTbl[0];
+    }
+
+    float _GetSize(eId id) {
+        Info info = _GetInfo(id);
+        return _GetSize(info.size);
     }
 
     // Use this for initialization
@@ -77,8 +106,20 @@ public class Enemy : MonoBehaviour {
     }
 
     void DoBulletAim(float speed, float msWait=0f) {
-        float aim = Utils.GetAim2D(this.gameObject, _player.gameObject);
+        float aim = _GetAim();
         DoBullet(aim, speed, msWait);
+    }
+
+    void DoBulletNWay(int nway, float degree, float range, float speed, float mswait=0f) {
+        if(nway <= 1) {
+            nway = 2;
+        }
+        float rot = degree - range / 2;
+        float dRot = range / (nway - 1);
+        for (int i = 0; i < nway; i++) {
+            DoBullet(rot, speed, mswait);
+            rot += dRot;
+        }
     }
 
     /// <summary>
@@ -91,21 +132,63 @@ public class Enemy : MonoBehaviour {
     /// Fixed update.
     /// </summary>
     private void FixedUpdate() {
+        _Move();
+        _Bullet();
+    }
 
-        // Friction.
-        {
-            float vx = _rigidbody2D.velocity.x * 0.97f;
-            float vy = _rigidbody2D.velocity.y * 0.97f;
-            _rigidbody2D.velocity = new Vector2(vx, vy);
+    /// <summary>
+    /// Move this instance.
+    /// </summary>
+    void _Move() {
+        float vx = _rigidbody2D.velocity.x;
+        float vy = _rigidbody2D.velocity.y;
+
+        float friction = 1.0f;
+
+        switch(id) {
+        case eId.Zako:
+            friction = 0.97f;
+            break;
+
+        default:
+            break;
         }
+        vx *= friction;
+        vy *= friction;
 
+        _rigidbody2D.velocity = new Vector2(vx, vy);
+    }
+
+    /// <summary>
+    /// Bullet this instance.
+    /// </summary>
+    void _Bullet() {
         interval++;
-        if(interval%60 == 1) {
-            for (int i = 0; i < 6; i++) {
-                float msWait = 100 * i;
-                DoBulletAim(2 + 0.5f * i, msWait);
+        switch (id) {
+        case eId.Zako:
+            if(interval < 120) {
+                break;
             }
+            if(interval%40 == 1) {
+                float aim = _GetAim();
+                DoBulletNWay(3, aim, 5, 1);
+            }
+            break;
+
+        default:
+            if (interval % 60 == 1) {
+                for (int i = 0; i < 6; i++) {
+                    float msWait = 100 * i;
+                    DoBulletAim(2 + 0.5f * i, msWait);
+                }
+            }
+            break;
         }
+    }
+
+    float _GetAim() {
+        float aim = Utils.GetAim2D(this.gameObject, _player.gameObject);
+        return aim;
     }
 
     /// <summary>
@@ -129,7 +212,7 @@ public class Enemy : MonoBehaviour {
         }
     }
 
-    float GetSize(eSize Size) {
+    float _GetSize(eSize Size) {
         switch(Size) {
         case eSize.Small:
             return 0.2f;
@@ -138,14 +221,5 @@ public class Enemy : MonoBehaviour {
         default:
             return 0.8f;
         }
-    }
-
-    eSize GetSize(eId Id) {
-        switch(Id) {
-        case eId.Zako:
-            return eSize.Small;
-        }
-
-        return eSize.Middle;
     }
 }

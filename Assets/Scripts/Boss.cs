@@ -52,7 +52,7 @@ public class Boss : MonoBehaviour {
 
         if(interval%60 == 0) {
             float rot = Random.Range(0, 360);
-            AddEnemy(Enemy.eId.Zako, rot, 5);
+            AddEnemy(Enemy.eId.Zako, rot, 3);
         }
     }
 

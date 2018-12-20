@@ -15,7 +15,7 @@ public static class Utils {
     }
 
     public static bool OutOfScreen(Vector3 position) {
-        const float MARGIN = 0.5f;
+        const float MARGIN = 0.75f;
         if(position.x < -MOVE_LIMIT.x-MARGIN) {
             return true;
         }
