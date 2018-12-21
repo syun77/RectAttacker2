@@ -19,14 +19,18 @@ public class Enemy : MonoBehaviour {
     struct Info {
         public eId id;
         public eSize size;
-        public Info(eId id, eSize size) {
+        public int life;
+        public float destroy;
+        public Info(eId id, eSize size, int life, float destroy) {
             this.id = id;
             this.size = size;
+            this.life = life;
+            this.destroy = destroy;
         }
     };
 
     static Info[] InfoTbl = new Info[] {
-        new Info (eId.Zako, eSize.Small),
+        new Info (eId.Zako, eSize.Small, 3, 5f),
     };
 
     // ==============================================
@@ -40,6 +44,8 @@ public class Enemy : MonoBehaviour {
     // Variables.
     eId id = eId.Zako;
     int interval = 0;
+    int life = 0;
+    float tDestroy = 0f;
 
     // ==============================================
     /// <summary>
@@ -57,10 +63,15 @@ public class Enemy : MonoBehaviour {
         _rigidbody2D = GetComponent<Rigidbody2D>();
         Utils.SetVelocity(_rigidbody2D, degree, speed);
 
-        float size = _GetSize(id);
+        Info info = _GetInfo(id);
+        float size = _GetSize(info.size);
         transform.localScale = new Vector3(size, size, 1);
 
-        Destroy(gameObject, 3);
+        // Set life.
+        life = info.life;
+
+        // Set time for suicide.
+        tDestroy = info.destroy;
     }
 
     Info _GetInfo(eId id) {
@@ -71,11 +82,6 @@ public class Enemy : MonoBehaviour {
         }
 
         return InfoTbl[0];
-    }
-
-    float _GetSize(eId id) {
-        Info info = _GetInfo(id);
-        return _GetSize(info.size);
     }
 
     // Use this for initialization
@@ -134,6 +140,12 @@ public class Enemy : MonoBehaviour {
     private void FixedUpdate() {
         _Move();
         _Bullet();
+
+        tDestroy -= Time.deltaTime;
+        if(tDestroy <= 0) {
+            // Go to suicide.
+            Vanish();
+        }
     }
 
     /// <summary>
@@ -191,6 +203,17 @@ public class Enemy : MonoBehaviour {
         return aim;
     }
 
+    void _Damage(int val) {
+        life -= val;
+        if(life < 1) {
+            Vanish();
+        }
+    }
+
+    public void Vanish() {
+        Destroy(gameObject);
+    }
+
     /// <summary>
     /// trigger enter2D.
     /// </summary>
@@ -202,12 +225,14 @@ public class Enemy : MonoBehaviour {
                 Shot shot = collision.gameObject.GetComponent<Shot>();
                 shot.Vanish();
             }
+            _Damage(1);
             break;
 
         case "Horming": {
                 Homing homing = collision.gameObject.GetComponent<Homing>();
                 homing.Vanish();
             }
+            _Damage(10);
             break;
         }
     }
