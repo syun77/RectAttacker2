@@ -30,7 +30,7 @@ public class Bullet : MonoBehaviour {
 	}
 
     public void Vanish() {
-        Particle.Add(particle, transform.position.x, transform.position.y, 4, -1, Color.red);
+        Particle.Add(particle, transform.position.x, transform.position.y, 2, -1, Color.red);
         Destroy(gameObject);
     }
 }

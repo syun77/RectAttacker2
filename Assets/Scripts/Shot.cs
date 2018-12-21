@@ -36,7 +36,7 @@ public class Shot : MonoBehaviour {
     public void Vanish() {
         float deg = Utils.GetDegree(_rigidbody2D);
         deg += 180.0f;
-        Particle.Add(particle, transform.position.x, transform.position.y, 4, deg, Color.cyan);
+        Particle.Add(particle, transform.position.x, transform.position.y, 2, deg, Color.cyan);
         Destroy(gameObject);
     }
 }

@@ -6,13 +6,14 @@ public class Particle : MonoBehaviour {
 
     // ===============================
     // Static Functions.
-    public static void Add(GameObject obj, float x, float y, int count, float degree, Color color) {
+    public static void Add(GameObject obj, float x, float y, int count, float degree, Color color, float scale=1f) {
         Vector3 v = new Vector3(x, y);
         for (int i = 0; i < count; i++) {
             GameObject o = Instantiate(obj, v, Quaternion.identity);
             Particle p = o.GetComponent<Particle>();
             p.SetDegree(degree);
             p.SetColor(color);
+            p.SetScale(scale);
         }
     }
 
@@ -34,6 +35,10 @@ public class Particle : MonoBehaviour {
     }
     void SetColor(Color color) {
         _color = color;
+    }
+    void SetScale(float scale) {
+        float sc = scale * 0.5f;
+        transform.localScale = new Vector3(sc, sc, 1f);
     }
 
     // Use this for initialization

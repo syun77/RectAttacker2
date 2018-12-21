@@ -15,6 +15,8 @@ public class Player : MonoBehaviour {
     public int INITIALE_POWER;
     public int DECREASE_SHOT;
     public int DECREASE_SHIELD;
+    public int INCREASE_SHOT;
+    public int INCREASE_SHIELD;
 
     // ======================================
     // Variables. Objects.
@@ -101,7 +103,7 @@ public class Player : MonoBehaviour {
 
         bool b = Input.GetKey(KeyCode.X);
         if (b == false) {
-            _shieldPower += 5;
+            _shieldPower += INCREASE_SHIELD;
             if (_shieldPower > MAX_POWER) {
                 _shieldPower = MAX_POWER;
             }
@@ -142,7 +144,7 @@ public class Player : MonoBehaviour {
     void _UpdateShot() {
 
         // Increase power.
-        _shotPower += 5;
+        _shotPower += INCREASE_SHOT;
         if (_shotPower > MAX_POWER) {
             _shotPower = MAX_POWER;
         }
@@ -181,7 +183,7 @@ public class Player : MonoBehaviour {
                 _shotInterval = 3;
             }
             else if (rate < 0.9f) {
-                _shotInterval = 1;
+                _shotInterval = 2;
             }
         }
     }

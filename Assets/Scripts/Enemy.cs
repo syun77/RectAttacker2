@@ -178,10 +178,10 @@ public class Enemy : MonoBehaviour {
         interval++;
         switch (id) {
         case eId.Zako:
-            if(interval < 120) {
+            if(interval < 60) {
                 break;
             }
-            if(interval%40 == 1) {
+            if(interval%70 == 1) {
                 float aim = _GetAim();
                 DoBulletNWay(3, aim, 5, 1);
             }
@@ -211,6 +211,9 @@ public class Enemy : MonoBehaviour {
     }
 
     public void Vanish() {
+        Info info = _GetInfo(id);
+        float scale = _GetSize(info.size) * 10f;
+        Particle.Add(particle, transform.position.x, transform.position.y, 4, -1, Color.green, scale);
         Destroy(gameObject);
     }
 
