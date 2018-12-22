@@ -7,6 +7,7 @@ public class Reflect : MonoBehaviour {
     // ======================================
     // Variables. Objects.
     public GameObject _horming;
+    public Player _player;
 
     // ======================================
     // Functions.
@@ -19,6 +20,10 @@ public class Reflect : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    public void SetPlayer(Player player) {
+        _player = player;
+    }
 
     public void SetPosition(float x, float y) {
         transform.position = new Vector3(x, y);
@@ -34,7 +39,9 @@ public class Reflect : MonoBehaviour {
             GameObject obj = Instantiate(_horming, v, Quaternion.identity);
             Homing h = obj.GetComponent<Homing>();
             Bullet b = collision.gameObject.GetComponent<Bullet>();
-            h.SetDirection(Utils.GetDegree(b.GetComponent<Rigidbody2D>()));
+            Rigidbody2D rb = b.GetComponent<Rigidbody2D>();
+            h.SetDirection(Utils.GetDegree(rb));
+            _player.AddForce(rb.velocity.x, rb.velocity.y);
             b.Vanish();
         }
     }

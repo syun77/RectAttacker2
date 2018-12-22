@@ -33,6 +33,7 @@ public class Player : MonoBehaviour {
     int _shotPower;
     int _shieldPower;
     int _shotInterval = 0;
+    Vector2 _force;
 
     // ======================================
     // Functions.
@@ -42,7 +43,14 @@ public class Player : MonoBehaviour {
 
         _shotPower = INITIALE_POWER;
         _shieldPower = INITIALE_POWER;
+
+        _force = new Vector2();
 	}
+
+    public void AddForce(float vx, float vy) {
+        _force.x = vx;
+        _force.y = vy * 2;
+    }
 
     /// <summary>
     /// Get the reflect.
@@ -53,6 +61,7 @@ public class Player : MonoBehaviour {
             GameObject obj = GameObject.Find("Reflect");
             if(obj != null) {
                 _reflect = obj.GetComponent<Reflect>();
+                _reflect.SetPlayer(this);
             }
         }
 
@@ -80,11 +89,14 @@ public class Player : MonoBehaviour {
     /// Move this instance.
     /// </summary>
     void Move() {
+        _force *= 0.7f;
+
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
         Vector2 v = new Vector2(horizontal, vertical);
         v.Normalize();
         v *= MOVE_SPEED;
+        v += _force;
         _rigidbody2D.velocity = v;
 
         // Check to outside.
