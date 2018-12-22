@@ -75,6 +75,11 @@ public class Boss : MonoBehaviour {
             AddEnemy(Enemy.eId.Aim, 270-45, 3);
             AddEnemy(Enemy.eId.Aim, 270+45, 3);
             break;
+
+        case 240:
+            AddEnemy(Enemy.eId.SideL, 180, 3);
+            AddEnemy(Enemy.eId.SideR, 0, 3);
+            break;
         }
     }
 
