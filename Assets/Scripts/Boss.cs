@@ -5,6 +5,14 @@ using UnityEngine;
 public class Boss : MonoBehaviour {
 
     // ==============================================
+    // Constants.
+    enum eMode {
+        A,
+        B,
+        C,
+    }
+
+    // ==============================================
     // Variables: Objects.
     public GameObject bullet;
     public GameObject particle;
@@ -14,9 +22,14 @@ public class Boss : MonoBehaviour {
     // ==============================================
     // Variables.
     int interval = 0;
+    int timer = 0;
 
     // ==============================================
     // Functions.
+    eMode GetMode() {
+        return eMode.A;
+    }
+
     // Use this for initialization
     void Start () {
     }
@@ -47,12 +60,31 @@ public class Boss : MonoBehaviour {
         }
     }
 
+    void _UpdateA() {
+        timer++;
+        if(timer < 120) {
+            if(40 < timer && timer < 50) {
+                if (timer % 3 == 0) {
+                    float rot = 90 + Random.Range(-45, 45);
+                    AddEnemy(Enemy.eId.Zako, rot, 3);
+                }
+            }
+        }
+        switch(timer) {
+        case 120:
+            AddEnemy(Enemy.eId.Aim, 270-45, 3);
+            AddEnemy(Enemy.eId.Aim, 270+45, 3);
+            break;
+        }
+    }
+
     private void FixedUpdate() {
         interval++;
 
-        if(interval%60 == 0) {
-            float rot = Random.Range(0, 360);
-            AddEnemy(Enemy.eId.Zako, rot, 3);
+        switch(GetMode()) {
+        case eMode.A:
+            _UpdateA();
+            break;
         }
     }
 

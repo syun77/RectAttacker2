@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour {
     // Constants.
     public enum eId {
         Zako,
+        Aim,
     };
 
     enum eSize {
@@ -20,17 +21,21 @@ public class Enemy : MonoBehaviour {
         public eId id;
         public eSize size;
         public int life;
+        public int wait;
         public float destroy;
-        public Info(eId id, eSize size, int life, float destroy) {
+        public Info(eId id, eSize size, int life, int wait, float destroy) {
             this.id = id;
             this.size = size;
             this.life = life;
+            this.wait = wait;
             this.destroy = destroy;
         }
     };
 
     static Info[] InfoTbl = new Info[] {
-        new Info (eId.Zako, eSize.Small, 3, 5f),
+        //        ID,       SIZE,        HP, WAIT, DESTROY
+        new Info (eId.Zako, eSize.Small, 3, 120, 5f),
+        new Info (eId.Aim, eSize.Middle, 10, 120, 10f),
     };
 
     // ==============================================
@@ -46,8 +51,74 @@ public class Enemy : MonoBehaviour {
     int interval = 0;
     int life = 0;
     float tDestroy = 0f;
+    int wait = 0;
 
     // ==============================================
+    // Functions.
+    /// <summary>
+    /// Move this instance.
+    /// </summary>
+    void _Move() {
+        float vx = _rigidbody2D.velocity.x;
+        float vy = _rigidbody2D.velocity.y;
+
+        float friction = 1.0f;
+
+        switch (id) {
+        case eId.Zako:
+            friction = 0.97f;
+            break;
+
+        case eId.Aim:
+            friction = 0.95f;
+            break;
+
+        default:
+            break;
+        }
+        vx *= friction;
+        vy *= friction;
+
+        _rigidbody2D.velocity = new Vector2(vx, vy);
+    }
+
+    /// <summary>
+    /// Bullet this instance.
+    /// </summary>
+    void _Bullet() {
+        if(wait > 0) {
+            wait--;
+            return;
+        }
+
+        interval++;
+        switch (id) {
+        case eId.Zako:
+            if (interval % 70 == 10) {
+                float aim = _GetAim();
+                DoBulletNWay(3, aim, 5, 1);
+            }
+            break;
+
+        case eId.Aim:
+            if(interval % 60 == 1) {
+                int cnt = 3;
+                for (int i = 0; i < cnt; i++) {
+                    DoBulletAim(7, i * 0.2f);
+                }
+            }
+            break;
+
+        default:
+            if (interval % 60 == 1) {
+                for (int i = 0; i < 6; i++) {
+                    float msWait = 100 * i;
+                    DoBulletAim(2 + 0.5f * i, msWait);
+                }
+            }
+            break;
+        }
+    }
     /// <summary>
     /// Init the specified id, degree, speed and player.
     /// </summary>
@@ -69,6 +140,9 @@ public class Enemy : MonoBehaviour {
 
         // Set life.
         life = info.life;
+
+        // Set wait.
+        wait = info.wait;
 
         // Set time for suicide.
         tDestroy = info.destroy;
@@ -145,56 +219,6 @@ public class Enemy : MonoBehaviour {
         if(tDestroy <= 0) {
             // Go to suicide.
             Vanish();
-        }
-    }
-
-    /// <summary>
-    /// Move this instance.
-    /// </summary>
-    void _Move() {
-        float vx = _rigidbody2D.velocity.x;
-        float vy = _rigidbody2D.velocity.y;
-
-        float friction = 1.0f;
-
-        switch(id) {
-        case eId.Zako:
-            friction = 0.97f;
-            break;
-
-        default:
-            break;
-        }
-        vx *= friction;
-        vy *= friction;
-
-        _rigidbody2D.velocity = new Vector2(vx, vy);
-    }
-
-    /// <summary>
-    /// Bullet this instance.
-    /// </summary>
-    void _Bullet() {
-        interval++;
-        switch (id) {
-        case eId.Zako:
-            if(interval < 60) {
-                break;
-            }
-            if(interval%70 == 1) {
-                float aim = _GetAim();
-                DoBulletNWay(3, aim, 5, 1);
-            }
-            break;
-
-        default:
-            if (interval % 60 == 1) {
-                for (int i = 0; i < 6; i++) {
-                    float msWait = 100 * i;
-                    DoBulletAim(2 + 0.5f * i, msWait);
-                }
-            }
-            break;
         }
     }
 
